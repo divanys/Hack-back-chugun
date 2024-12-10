@@ -5,6 +5,7 @@ from src.databases.postgres.repositories import (
     UserTypesRepository,
     CoursesRepository,
     HobbyCoursesRepository,
+    HobbiesRepository
 )  # noqa
 
 
@@ -14,6 +15,7 @@ class InterfaceUnitOfWork(ABC):
     user_type_repository: Type[UserTypesRepository]
     courses_repository: Type[CoursesRepository]
     hobby_courses_repository: Type[HobbyCoursesRepository]
+    hobbies_repository: Type[HobbiesRepository]
 
     @abstractmethod
     async def __aenter__(self):

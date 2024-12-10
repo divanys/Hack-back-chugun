@@ -12,6 +12,7 @@ from src.databases.postgres.repositories.courses_repository import (  # noqa
 from src.databases.postgres.repositories.hobby_courses_repository import (
     HobbyCoursesRepository,
 )  # noqa
+from src.databases.postgres.repositories.hobbies_repository import HobbiesRepository # noqa
 
 
 __all__: List[str] = [
@@ -20,4 +21,5 @@ __all__: List[str] = [
     "UserTypesRepository",
     "CoursesRepository",
     "HobbyCoursesRepository",
+    "HobbiesRepository"
 ]  # noqa

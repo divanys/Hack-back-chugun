@@ -3,7 +3,7 @@ from src.databases.postgres.repositories import (  # noqa
     UserRepository,
     UserTypesRepository,
     CoursesRepository,
-    HobbyCoursesRepository,
+    HobbyCoursesRepository, HobbiesRepository,
 )  # noqa
 from src.databases.db_worker import DatabaseWorker
 
@@ -24,9 +24,10 @@ class UnitOfWork(InterfaceUnitOfWork):
         self.user_repository = UserRepository(session=self.session)  # noqa
         self.user_type_repository = UserTypesRepository(session=self.session)  # noqa
         self.courses_repository = CoursesRepository(session=self.session)  # noqa
-        self.hobby_courses_repository = HobbyCoursesRepository(
-            session=self.session
+        self.hobby_courses_repository = HobbyCoursesRepository( # noqa
+            session=self.session # noqa
         )  # noqa
+        self.hobbies_repository = HobbiesRepository(session=self.session) # noqa
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """
