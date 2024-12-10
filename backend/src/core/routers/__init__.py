@@ -12,4 +12,9 @@ api_v1_router.include_router(courses_router)
 api_v1_router.include_router(hobby_router)
 
 
-__all__: List[str] = ["auth_router", "api_v1_router", "courses_router", "hobby_router"]
+__all__: List[str] = [
+    "auth_router",
+    "api_v1_router",
+    "courses_router",
+    "hobby_router",
+]  # noqa

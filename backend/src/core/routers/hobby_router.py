@@ -1,6 +1,4 @@
 from logging import Logger
-from sys import prefix
-
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import Response
 from fastapi.requests import Request
@@ -13,26 +11,23 @@ from src.other import logger_dep, user_config
 from src.core.dto.hobby_dto import CreateHobby, AllHobbies
 
 
-hobby_router: APIRouter = APIRouter(
-    prefix="/hobby",
-    tags=["Hobby"]
-)
+hobby_router: APIRouter = APIRouter(prefix="/hobby", tags=["Hobby"])  # noqa
 
 
 @hobby_router.post(
-    path='/create',
+    path="/create",
     description="Создание хобби, доступен для администратора",
     summary="Создание хобби",
     response_model=None,
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
 )
 async def create_hobby(
-        logger: Annotated[Logger, Depends(logger_dep)],
-        db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
-        token_data: Annotated[dict, Depends(AuthService.verify)],
-        new_hobby: CreateHobby,
-        req: Request,
-        res: Response
+    logger: Annotated[Logger, Depends(logger_dep)],
+    db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],  # noqa
+    token_data: Annotated[dict, Depends(AuthService.verify)],  # noqa
+    new_hobby: CreateHobby,
+    req: Request,
+    res: Response,
 ) -> None:
     """
     Создание хобби
@@ -43,26 +38,27 @@ async def create_hobby(
     :return:
     """
 
-    logger.info(msg=f"Hobbies: Создание хобби {new_hobby.dict()}", extra=user_config)
+    logger.info(
+        msg=f"Hobbies: Создание хобби {new_hobby.dict()}", extra=user_config
+    )  # noqa
 
     await HobbyService.create(
-        uow=db,
-        token_data=token_data,
-        new_hobby=new_hobby
-    )
+        uow=db, token_data=token_data, new_hobby=new_hobby
+    )  # noqa
+
 
 @hobby_router.get(
     path="/all_hobbies",
     response_model=AllHobbies,
     description="Все хобби",
     summary="Все хобби",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
 )
 async def all_hobbies(
-        logger: Annotated[Logger, Depends(logger_dep)],
-        db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
-        req: Request,
-        res: Response
+    logger: Annotated[Logger, Depends(logger_dep)],
+    db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
+    req: Request,
+    res: Response,
 ) -> AllHobbies:
     """
     Все хобби
@@ -73,7 +69,7 @@ async def all_hobbies(
     :return:
     """
 
-    logger.info(msg=f"Hobbies: Получение всех хобби", extra=user_config)
+    logger.info(msg=f"Hobbies: Получение всех хобби", extra=user_config)  # noqa
 
     return await HobbyService.all_hobby(uow=db)
 
@@ -85,15 +81,15 @@ async def all_hobbies(
     """,
     summary="Удаление хобби",
     response_model=None,
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
 )
 async def delete_hobby(
-        logger: Annotated[Logger, Depends(logger_dep)],
-        db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
-        token_data: Annotated[dict, Depends(AuthService.verify)],
-        id_hobby: int,
-        req: Request,
-        res: Response
+    logger: Annotated[Logger, Depends(logger_dep)],
+    db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
+    token_data: Annotated[dict, Depends(AuthService.verify)],
+    id_hobby: int,
+    req: Request,
+    res: Response,
 ) -> None:
     """
     Удаление хобби
@@ -107,7 +103,5 @@ async def delete_hobby(
     """
 
     await HobbyService.delete_hobby(
-        uow=db,
-        token_data=token_data,
-        id_hobby=id_hobby
-    )
+        uow=db, token_data=token_data, id_hobby=id_hobby
+    )  # noqa

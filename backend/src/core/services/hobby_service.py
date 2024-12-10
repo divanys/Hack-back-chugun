@@ -9,10 +9,7 @@ from src.core.errors.hobby_course_errors import HobbyCoursesErrors
 class HobbyService:
     @classmethod
     async def create(
-            cls,
-            token_data: dict,
-            uow: InterfaceUnitOfWork,
-            new_hobby: CreateHobby
+        cls, token_data: dict, uow: InterfaceUnitOfWork, new_hobby: CreateHobby  # noqa
     ) -> None:
         """
         Создание хобби
@@ -27,11 +24,9 @@ class HobbyService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:
-                    is_created = await uow.hobbies_repository.create_data(
-                        model_data=Hobbies(
-                            text_hobby=new_hobby.text_hobby
-                        )
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER:  # noqa
+                    is_created = await uow.hobbies_repository.create_data(  # noqa
+                        model_data=Hobbies(text_hobby=new_hobby.text_hobby)  # noqa
                     )
                     if is_created:
                         return None
@@ -51,19 +46,14 @@ class HobbyService:
             all_hobbies = AllHobbies(hobbies=[])
             for hobby in all_hobby:
                 all_hobbies.hobbies.append(
-                    CreateHobby(
-                        text_hobby=hobby[0].text_hobby
-                    )
-                )
+                    CreateHobby(text_hobby=hobby[0].text_hobby)
+                )  # noqa
 
             return all_hobbies
 
     @classmethod
     async def delete_hobby(
-            cls,
-            uow: InterfaceUnitOfWork,
-            token_data: dict,
-            id_hobby: int
+        cls, uow: InterfaceUnitOfWork, token_data: dict, id_hobby: int  # noqa
     ) -> None:
         """
         Удаление хобби
@@ -79,7 +69,9 @@ class HobbyService:
             )  # noqa
             if user_data:
                 if user_data[0].id_user_type == UserTypesEnum.TEACHER:
-                    is_deleted = await uow.hobbies_repository.delete(_id=id_hobby)
+                    is_deleted = await uow.hobbies_repository.delete(
+                        _id=id_hobby
+                    )  # noqa
                     if is_deleted:
                         return None
                     await HobbyCoursesErrors.no_delete_hobby()

@@ -5,7 +5,7 @@ from src.databases.postgres.repositories import (
     UserTypesRepository,
     CoursesRepository,
     HobbyCoursesRepository,
-    HobbiesRepository
+    HobbiesRepository,
 )  # noqa
 
 
