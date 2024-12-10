@@ -15,8 +15,7 @@ async def logger_dep() -> logging.Logger:
     logging.basicConfig(
         filemode="edu-connect.log",
         level=logging.INFO,
-        format="%(asctime)s %(user)-8s $(message)s"
+        format="%(asctime)s %(user)-8s $(message)s",
     )
-    
-    return logger
 
+    return logger

@@ -1,5 +1,5 @@
 import uvicorn
-from backend.src.application import EduConnectApplication
+from backend.src import EduConnectApplication
 from backend.configs import api_settings
 
 
