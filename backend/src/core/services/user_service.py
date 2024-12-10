@@ -10,9 +10,7 @@ class UserService:
 
     @classmethod
     async def register_user_on_db(
-            cls,
-            user_data: RegisterUser,
-            uow: InterfaceUnitOfWork
+        cls, user_data: RegisterUser, uow: InterfaceUnitOfWork
     ) -> None:
         """
         Сервис пользователя - регистрация
@@ -22,14 +20,17 @@ class UserService:
         """
 
         async with uow:
-            hashed_password = HashService.hashed_password(password=user_data.password) # noqa
+            hashed_password = HashService.hashed_password(
+                password=user_data.password
+            )  # noqa
             is_register = await uow.user_repository.create_data(
                 model_data=Users(
                     id_user_type=UserTypesEnum.USER.value,
                     email=user_data.email,
-                    hashed_password=hashed_password
-                ) # noqa
+                    hashed_password=hashed_password,
+                )  # noqa
             )
 
-            if is_register: return None
+            if is_register:
+                return None
             await UserErrors.no_register_user()

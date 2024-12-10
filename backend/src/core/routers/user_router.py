@@ -8,10 +8,7 @@ from src.core.dep.depedencies_api import UnitOfWork, InterfaceUnitOfWork
 from src.core.services.user_service import UserService
 
 
-auth_router: APIRouter = APIRouter(
-    prefix="/auth",
-    tags=["Auth"]
-)
+auth_router: APIRouter = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @auth_router.post(
@@ -21,12 +18,12 @@ auth_router: APIRouter = APIRouter(
     """,
     summary="Регистрация пользователя",
     response_model=None,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
 )
 async def registration_user(
-        user_data: RegisterUser,
-        logger: Annotated[Logger, Depends(logger_dep)],
-        db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)]
+    user_data: RegisterUser,
+    logger: Annotated[Logger, Depends(logger_dep)],
+    db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
 ) -> None:
     """
     APIROUTER - Регистрация пользователя
@@ -35,8 +32,8 @@ async def registration_user(
     :return:
     """
 
-    logger.info(msg=f"AUTH: Регистрация пользователя email={user_data.email}")
-    await UserService.register_user_on_db(
-        uow=db,
-        user_data=user_data
-    )
+    logger.info(
+        msg=f"AUTH: Регистрация пользователя email={user_data.email}",
+        extra=user_config,  # noqa
+    )  # noqa
+    await UserService.register_user_on_db(uow=db, user_data=user_data)

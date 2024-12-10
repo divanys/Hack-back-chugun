@@ -3,7 +3,6 @@ from src.databases.postgres.repositories import (  # noqa
     UserRepository,
     UserTypesRepository,
 )  # noqa
-from sqlalchemy.ext.asyncio import AsyncSession
 from src.databases.db_worker import DatabaseWorker
 
 
@@ -21,7 +20,7 @@ class UnitOfWork(InterfaceUnitOfWork):
         session = await self.database_worker.session
         self.session = session()
         self.user_repository = UserRepository(session=self.session)  # noqa
-        self.user_type_repository = UserTypesRepository(session=self.session) # noqa
+        self.user_type_repository = UserTypesRepository(session=self.session)  # noqa
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """

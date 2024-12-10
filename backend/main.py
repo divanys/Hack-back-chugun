@@ -8,7 +8,6 @@ from contextlib import asynccontextmanager
 from src.databases.postgres.models import UsersType
 from src.other.enums.api_enums import UserTypesEnum
 from sqlalchemy import insert
-from sqlalchemy import text
 
 
 @asynccontextmanager
@@ -20,17 +19,23 @@ async def lifespan(app: FastAPI) -> None:
                 0: "student",
                 1: "worker",
                 2: "admin",
-                3: "teacher"
+                3: "teacher",
             }
 
-            for usertype in [UserTypesEnum.USER.value, UserTypesEnum.WORK.value, UserTypesEnum.ADMIN.value,
-                             UserTypesEnum.TEACHER.value]:
-                stmt = insert(UsersType).values(name_type=user_types.get(usertype)) # noqa
+            for usertype in [
+                UserTypesEnum.USER.value,
+                UserTypesEnum.WORK.value,
+                UserTypesEnum.ADMIN.value,
+                UserTypesEnum.TEACHER.value,
+            ]:
+                stmt = insert(UsersType).values(
+                    name_type=user_types.get(usertype)
+                )  # noqa
                 await session.execute(stmt)
 
             await session.commit()
             await session.close()
-        except Exception as ex:
+        except Exception:
             pass
 
         yield

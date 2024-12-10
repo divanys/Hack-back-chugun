@@ -16,7 +16,9 @@ class HashService:
         )  # noqa
 
     @classmethod
-    async def verify_password(cls, password: str, hashed_password: bytes) -> bool: # noqa
+    async def verify_password(
+        cls, password: str, hashed_password: bytes
+    ) -> bool:  # noqa
         """
         Проверка пароля
         :param password:

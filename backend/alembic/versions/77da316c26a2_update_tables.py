@@ -82,9 +82,7 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(
-        op.f("ix_Tasks_text_task"), "Tasks", ["text_task"], unique=False
-    )
+    op.create_index(op.f("ix_Tasks_text_task"), "Tasks", ["text_task"], unique=False)
     op.create_table(
         "Users",
         sa.Column("email", sa.String(length=150), nullable=False),
