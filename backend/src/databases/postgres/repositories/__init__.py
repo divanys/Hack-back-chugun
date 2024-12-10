@@ -18,6 +18,9 @@ from src.databases.postgres.repositories.hobbies_repository import (
 from src.databases.postgres.repositories.vacancies_repository import (
     VacanciesRepository,
 )  # noqa
+from src.databases.postgres.repositories.university_repository import (
+    UniversityRepository,
+)  # noqa
 
 
 __all__: List[str] = [
