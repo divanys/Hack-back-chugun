@@ -15,6 +15,7 @@ from src.databases.postgres.repositories.interfaces.delete_interface import (
     DeleteInterface,
 )  # noqa
 from sqlalchemy import select, delete, update
+from typing import Type
 
 
 class UserRepository(
@@ -24,8 +25,8 @@ class UserRepository(
     UpdateInterface,
     DeleteInterface,
 ):
-    def __init__(self, model: Users, session: AsyncSession) -> None:
-        self.__model = model
+    def __init__(self, session: AsyncSession) -> None:
+        self.__model: Type[Users] = Users
         self.session = session
         super().__init__(model=self.__model, session=self.session)
 

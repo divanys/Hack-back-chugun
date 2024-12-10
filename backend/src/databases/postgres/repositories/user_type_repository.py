@@ -8,11 +8,12 @@ from src.databases.postgres.repositories.interfaces.get_one_interface import (
     GetOneInterface,
 )  # noqa
 from sqlalchemy import select
+from typing import Type
 
 
 class UserTypesRepository(GeneralRepository, GetAllInterface, GetOneInterface):
-    def __init__(self, model: UsersType, session: AsyncSession) -> None:
-        self.__model = model
+    def __init__(self, session: AsyncSession) -> None:
+        self.__model: Type[UsersType] = UsersType
         self.session = session
         super().__init__(model=self.__model, session=self.session)
 
