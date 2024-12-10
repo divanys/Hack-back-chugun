@@ -1,0 +1,1 @@
+from backend.src.application import EduConnectApplication
