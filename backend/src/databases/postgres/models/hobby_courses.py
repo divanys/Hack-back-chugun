@@ -10,7 +10,7 @@ class HobbyCourses(MainBase):
     course_data: Mapped["Courses"] = relationship(  # noqa
         "Courses", back_populates="hobbies", uselist=False  # noqa
     )
-    hobby_data: Mapped["Hobby"] = relationship(  # noqa
+    hobbies: Mapped["Hobby"] = relationship(  # noqa
         "Hobbies", back_populates="courses", uselist=False  # noqa
     )
 

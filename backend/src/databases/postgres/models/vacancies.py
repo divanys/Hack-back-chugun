@@ -9,9 +9,6 @@ class Vacancies(MainBase):
     title_description: Mapped[str] = mapped_column(type_=String(100))
     description: Mapped[str] = mapped_column(type_=Text)
     id_user: Mapped[int] = mapped_column(ForeignKey("Users.id"))
-    hobbies: Mapped[List["HobbyCourses"]] = relationship(  # noqa
-        "HobbyCourses", back_populates="course_data", uselist=True
-    )  # noqa
     user_data: Mapped["Users"] = relationship(  # noqa
         "Users", back_populates="vacancies", uselist=False
     )  # noqa

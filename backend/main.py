@@ -16,10 +16,10 @@ async def lifespan(app: FastAPI) -> None:
     async with ses.begin() as session:
         try:
             user_types: dict[int, str] = {
-                0: "student",
-                1: "worker",
-                2: "admin",
-                3: "teacher",
+                1: "student",
+                2: "worker",
+                3: "admin",
+                4: "teacher",
             }
 
             for usertype in [

@@ -20,7 +20,7 @@ class UserService:
         """
 
         async with uow:
-            hashed_password = HashService.hashed_password(
+            hashed_password = await HashService.hashed_password(
                 password=user_data.password
             )  # noqa
             is_register = await uow.user_repository.create_data(
