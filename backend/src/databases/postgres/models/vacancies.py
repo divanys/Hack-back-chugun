@@ -10,7 +10,7 @@ class Vacancies(MainBase):
     description: Mapped[str] = mapped_column(type_=Text)
     id_user: Mapped[int] = mapped_column(ForeignKey("Users.id"))
     user_data: Mapped["Users"] = relationship(  # noqa
-        "Users", back_populates="vacancies", uselist=False # noqa
+        "Users", back_populates="vacancies", uselist=False  # noqa
     )  # noqa
 
     def __str__(self) -> str:

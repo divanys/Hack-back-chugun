@@ -93,7 +93,7 @@ class AuthService:
             await AuthErrors.no_create_tokens()
 
     @classmethod
-    async def verify(cls, req: Request, res: Response) -> str:  # noqa
+    async def verify(cls, req: Request, res: Response) -> dict:  # noqa
         """
         Проверка токена
         :param type_token:
@@ -120,7 +120,9 @@ class AuthService:
                     type_token="access",  # noqa
                 )  # noqa
                 res.set_cookie("access_token", new_access_token)
-                return new_access_token
+                return await cls.decode_token(
+                    type_token="access", token=new_access_token
+                )  # noqa
             except Exception:
                 await AuthErrors.no_create_tokens()
         await AuthErrors.no_create_tokens()
