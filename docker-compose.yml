@@ -1,0 +1,42 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: database
+    image: postgres:13.3
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5455:5432"
+    restart: always
+    networks:
+      - edu_bridge
+  redis:
+    container_name: redis_db
+    image: redis:7.4.1-alpine3.20
+    ports:
+      - "6477:6379"
+    restart: always
+    depends_on:
+      - backend
+    networks:
+      - edu_bridge
+  backend:
+    container_name: backend_edu
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - edu_bridge
+
+networks:
+  edu_bridge:
+    driver: bridge

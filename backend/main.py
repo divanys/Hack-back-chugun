@@ -1,10 +1,10 @@
 import uvicorn
-from backend.src import EduConnectApplication
+from src import EduConnectApplication
 from fastapi import FastAPI
-from backend.configs import api_settings
+from configs import api_settings
 from src.databases.db_worker import DatabaseWorker
 from contextlib import asynccontextmanager
-
+import os
 from src.databases.postgres.models import UsersType
 from src.other.enums.api_enums import UserTypesEnum
 from sqlalchemy import insert
@@ -45,6 +45,8 @@ application: FastAPI = EduConnectApplication(lifespan=lifespan).app
 
 
 if __name__ == "__main__":
+    # Run alembic
+    os.system("alembic upgrade head")
     uvicorn.run(
         app=application,
         host=api_settings.API_HOST,
