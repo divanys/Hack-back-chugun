@@ -25,4 +25,5 @@ class APISettings:
         self.REFRESH_TOKEN_LIFE = int(getenv("REFRESH_TOKEN_LIFE"))
         self.ALGORITHM = getenv("ALGORITHM")
 
+
 api_settings: APISettings = APISettings()

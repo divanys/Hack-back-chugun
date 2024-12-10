@@ -15,11 +15,17 @@ class Recommends(MainBase):
     description: Mapped[str] = mapped_column(type_=Text)
 
     student_data: Mapped["Users"] = relationship(  # noqa
-        "Users", back_populates="rec_student_data", uselist=False, foreign_keys=[id_user]  # noqa
+        "Users",
+        back_populates="rec_student_data",
+        uselist=False,
+        foreign_keys=[id_user],  # noqa
     )
 
     us_ch_data: Mapped["Users"] = relationship(  # noqa
-        "Users", back_populates="rec_us_ch_data", uselist=False, foreign_keys=[id_us_ch]  # noqa
+        "Users",
+        back_populates="rec_us_ch_data",
+        uselist=False,
+        foreign_keys=[id_us_ch],  # noqa
     )
 
     def __str__(self) -> str:

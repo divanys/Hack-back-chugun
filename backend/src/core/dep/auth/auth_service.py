@@ -12,7 +12,9 @@ from fastapi import Request
 
 class AuthService:
     @classmethod
-    async def create_tokens(cls, user_id: int, type_token: Literal["access", "refresh"]) -> str:
+    async def create_tokens(
+        cls, user_id: str, type_token: Literal["access", "refresh"]
+    ) -> str:
         """
         Создание токена
         :param user_id:
@@ -22,14 +24,36 @@ class AuthService:
         try:
             match type_token:
                 case "access":
-                    data: dict[str, Any] = {"sub": user_id}
-                    data.update({"exp": (datetime.utcnow() + timedelta(minutes=api_settings.TOKEN_LIFE))}) # noqa
-                    token = jwt.encode(data, key=api_settings.TOKEN, algorithm=api_settings.ALGORITHM) # noqa
+                    data: dict[str, Any] = {"sub": str(user_id)}
+                    data.update(
+                        {
+                            "exp": (
+                                datetime.utcnow()
+                                + timedelta(minutes=api_settings.TOKEN_LIFE)  # noqa
+                            )
+                        }
+                    )  # noqa
+                    token = jwt.encode(
+                        data,
+                        key=api_settings.TOKEN,
+                        algorithm=api_settings.ALGORITHM,  # noqa
+                    )  # noqa
                     return token
                 case "refresh":
-                    data: dict[str, Any] = {"sub": user_id}
-                    data.update({"exp": (datetime.utcnow() + timedelta(days=api_settings.TOKEN_LIFE))}) # noqa
-                    token = jwt.encode(data, key=api_settings.REFRESH_TOKEN, algorithm=api_settings.ALGORITHM) # noqa
+                    data: dict[str, Any] = {"sub": str(user_id)}
+                    data.update(
+                        {
+                            "exp": (
+                                datetime.utcnow()
+                                + timedelta(days=api_settings.TOKEN_LIFE)  # noqa
+                            )
+                        }
+                    )  # noqa
+                    token = jwt.encode(
+                        data,
+                        key=api_settings.REFRESH_TOKEN,
+                        algorithm=api_settings.ALGORITHM,
+                    )  # noqa
                     return token
                 case _:
                     await AuthErrors.no_create_tokens()
@@ -37,7 +61,9 @@ class AuthService:
             await AuthErrors.no_create_tokens()
 
     @classmethod
-    async def decode_token(cls, type_token: Literal["access", "refresh"], token: str) -> dict: # noqa
+    async def decode_token(
+        cls, type_token: Literal["access", "refresh"], token: str
+    ) -> dict:  # noqa
         """
         Декодирование токена
         :param type_token:
@@ -48,10 +74,18 @@ class AuthService:
         try:
             match type_token:
                 case "access":
-                    token_data = jwt.decode(token, key=api_settings.TOKEN, algorithms=[api_settings.ALGORITHM])  # noqa
+                    token_data = jwt.decode(
+                        token,
+                        key=api_settings.TOKEN,
+                        algorithms=[api_settings.ALGORITHM],
+                    )  # noqa
                     return token_data
                 case "refresh":
-                    token_data = jwt.decode(token, key=api_settings.REFRESH_TOKEN, algorithms=[api_settings.ALGORITHM])  # noqa
+                    token_data = jwt.decode(
+                        token,
+                        key=api_settings.REFRESH_TOKEN,
+                        algorithms=[api_settings.ALGORITHM],
+                    )  # noqa
                     return token_data
                 case _:
                     await AuthErrors.no_decode_tokens()
@@ -59,7 +93,7 @@ class AuthService:
             await AuthErrors.no_create_tokens()
 
     @classmethod
-    async def verify(cls, type_token: Literal["access", "refresh"], req: Request, res: Response) -> str: # noqa
+    async def verify(cls, req: Request, res: Response) -> str:  # noqa
         """
         Проверка токена
         :param type_token:
@@ -70,14 +104,23 @@ class AuthService:
         cookies = req.cookies
 
         try:
-            token_data = jwt.decode(cookies.get("access_token"), key=api_settings.TOKEN, algorithms=[api_settings.ALGORITHM])  # noqa
-            if token_data:
-                return token_data
-            else:
-                refresh_token_data: dict = await cls.decode_token(type_token="refresh", token=cookies.get("refresh_token"))
-                if refresh_token_data:
-                    new_access_token = await cls.create_tokens(user_id=refresh_token_data.get("sub"), type_token="access") # noqa
-                    res.set_cookie("access_token", new_access_token)
-                    return new_access_token
+            token_data = jwt.decode(
+                cookies.get("access_token"),
+                key=api_settings.TOKEN,
+                algorithms=[api_settings.ALGORITHM],
+            )  # noqa
+            return token_data
         except Exception:
-            await AuthErrors.no_create_tokens()
+            try:
+                refresh_token_data: dict = await cls.decode_token(
+                    type_token="refresh", token=cookies.get("refresh_token")  # noqa
+                )
+                new_access_token = await cls.create_tokens(
+                    user_id=str(refresh_token_data.get("sub")),
+                    type_token="access",  # noqa
+                )  # noqa
+                res.set_cookie("access_token", new_access_token)
+                return new_access_token
+            except Exception:
+                await AuthErrors.no_create_tokens()
+        await AuthErrors.no_create_tokens()

@@ -30,18 +30,26 @@ class Users(MainBase):
     )
 
     id_user_type: Mapped[int] = mapped_column(ForeignKey("Userstype.id"))
-    id_university: Mapped[int] = mapped_column(ForeignKey("University.id"), nullable=True)
+    id_university: Mapped[int] = mapped_column(
+        ForeignKey("University.id"), nullable=True
+    )
 
     university_data: Mapped["University"] = relationship(
         "University", back_populates="users", uselist=False  # noqa
     )
 
     rec_student_data: Mapped[List["Recommends"]] = relationship(
-        "Recommends", back_populates="student_data", uselist=True, foreign_keys=[Recommends.id_user]  # noqa
+        "Recommends",
+        back_populates="student_data",
+        uselist=True,
+        foreign_keys=[Recommends.id_user],  # noqa
     )
 
     rec_us_ch_data: Mapped[List["Recommends"]] = relationship(
-        "Recommends", back_populates="us_ch_data", uselist=True, foreign_keys=[Recommends.id_us_ch]  # noqa
+        "Recommends",
+        back_populates="us_ch_data",
+        uselist=True,
+        foreign_keys=[Recommends.id_us_ch],  # noqa
     )
 
     portfolio_data: Mapped["Portfolio"] = relationship(
@@ -56,9 +64,9 @@ class Users(MainBase):
         "UserHobbies", back_populates="user_data", uselist=True
     )
 
-    vacancies: Mapped[List["Vacancies"]] = relationship( # noqa
+    vacancies: Mapped[List["Vacancies"]] = relationship(  # noqa
         "Vacancies", back_populates="user_data", uselist=True
-    ) # noqa
+    )  # noqa
 
     def __str__(self) -> str:
         return str(

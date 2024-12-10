@@ -78,3 +78,14 @@ class UserRepository(
         if result:
             return True
         return False
+
+    async def find_user_by_email(self, email: str) -> None:
+        """
+        Поиск пользователя по почте
+        :param email:
+        :return:
+        """
+
+        stmt = select(self.__model).where(self.__model.email == email)
+        result = await self.session.execute(stmt)
+        return result.one_or_none()
