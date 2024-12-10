@@ -28,6 +28,8 @@ class Users(MainBase):
         type_=String(25), nullable=True, unique=False, index=True  # noqa
     )
 
+    id_user_type: Mapped[int] = mapped_column(ForeignKey("UsersType.id"))
+
     hobbies: Mapped[List["Hobbies"]] = relationship(  # noqa
         "Hobbies", back_populates="user_data", uselist=True  # noqa
     )
@@ -46,6 +48,10 @@ class Users(MainBase):
 
     portfolio_data: Mapped["Portfolio"] = relationship(
         "Portfolio", back_populates="user_data", uselist=False  # noqa
+    )
+
+    types: Mapped["UsersType"] = relationship(
+        "UsersType", back_populates="users", uselist=False
     )
 
     def __str__(self) -> str:
