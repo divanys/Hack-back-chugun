@@ -1,6 +1,6 @@
 from src.databases import MainBase
 from sqlalchemy.orm import Mapped, mapped_column, relationship  # noqa
-from sqlalchemy import String
+from sqlalchemy import String, Text
 from typing import List, Dict, Union, Any
 
 from src.databases.postgres.models.tasks import Tasks
@@ -8,8 +8,12 @@ from src.databases.postgres.models.tasks import Tasks
 
 class Courses(MainBase):
 
-    title_course: Mapped[String] = mapped_column(
+    title_course: Mapped[str] = mapped_column(
         type_=String(255), nullable=False, unique=True, index=True  # noqa
+    )
+
+    description_course: Mapped[str] = mapped_column(
+        type_=Text, nullable=True, unique=False, index=False
     )
 
     hobbies: Mapped[List["HobbyCourses"]] = relationship(  # noqa

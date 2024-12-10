@@ -1,7 +1,7 @@
 from src.databases import MainBase
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Text, ForeignKey
-from typing import List, Dict, Union, Any
+from typing import Dict, Union, Any
 
 
 class Vacancies(MainBase):
@@ -9,11 +9,8 @@ class Vacancies(MainBase):
     title_description: Mapped[str] = mapped_column(type_=String(100))
     description: Mapped[str] = mapped_column(type_=Text)
     id_user: Mapped[int] = mapped_column(ForeignKey("Users.id"))
-    hobbies: Mapped[List["HobbyCourses"]] = relationship(  # noqa
-        "HobbyCourses", back_populates="course_data", uselist=True
-    )  # noqa
     user_data: Mapped["Users"] = relationship(  # noqa
-        "Users", back_populates="vacancies", uselist=False
+        "Users", back_populates="vacancies", uselist=False  # noqa
     )  # noqa
 
     def __str__(self) -> str:

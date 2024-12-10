@@ -1,10 +1,10 @@
 import uvicorn
-from backend.src import EduConnectApplication
+from src import EduConnectApplication
 from fastapi import FastAPI
-from backend.configs import api_settings
+from configs import api_settings
 from src.databases.db_worker import DatabaseWorker
 from contextlib import asynccontextmanager
-
+import os
 from src.databases.postgres.models import UsersType
 from src.other.enums.api_enums import UserTypesEnum
 from sqlalchemy import insert
@@ -16,10 +16,10 @@ async def lifespan(app: FastAPI) -> None:
     async with ses.begin() as session:
         try:
             user_types: dict[int, str] = {
-                0: "student",
-                1: "worker",
-                2: "admin",
-                3: "teacher",
+                1: "student",
+                2: "worker",
+                3: "admin",
+                4: "teacher",
             }
 
             for usertype in [
@@ -45,6 +45,8 @@ application: FastAPI = EduConnectApplication(lifespan=lifespan).app
 
 
 if __name__ == "__main__":
+    # Run alembic
+    os.system("alembic upgrade head")
     uvicorn.run(
         app=application,
         host=api_settings.API_HOST,

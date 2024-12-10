@@ -6,9 +6,18 @@ from src.databases.postgres.repositories.user_repository import UserRepository  
 from src.databases.postgres.repositories.user_type_repository import (
     UserTypesRepository,
 )  # noqa
+from src.databases.postgres.repositories.courses_repository import (  # noqa
+    CoursesRepository,
+)  # nqqa
+from src.databases.postgres.repositories.hobby_courses_repository import (
+    HobbyCoursesRepository,
+)  # noqa
+
 
 __all__: List[str] = [
     "GeneralRepository",
     "UserRepository",
     "UserTypesRepository",
+    "CoursesRepository",
+    "HobbyCoursesRepository",
 ]  # noqa

@@ -3,6 +3,8 @@ from abc import abstractmethod, ABC
 from src.databases.postgres.repositories import (
     UserRepository,
     UserTypesRepository,
+    CoursesRepository,
+    HobbyCoursesRepository,
 )  # noqa
 
 
@@ -10,6 +12,8 @@ class InterfaceUnitOfWork(ABC):
 
     user_repository: Type[UserRepository]
     user_type_repository: Type[UserTypesRepository]
+    courses_repository: Type[CoursesRepository]
+    hobby_courses_repository: Type[HobbyCoursesRepository]
 
     @abstractmethod
     async def __aenter__(self):

@@ -3,7 +3,7 @@ from typing import Final
 
 
 class UserTypesEnum(Enum):
-    USER: Final[int] = 0
-    ADMIN: Final[int] = 1
-    TEACHER: Final[int] = 2
-    WORK: Final[int] = 3
+    USER: Final[int] = 1
+    ADMIN: Final[int] = 2
+    TEACHER: Final[int] = 3
+    WORK: Final[int] = 4

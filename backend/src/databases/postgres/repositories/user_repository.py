@@ -37,7 +37,7 @@ class UserRepository(
         :return:
         """
 
-        stmt = select(self.__model).where(self.__model.id == _id)
+        stmt = select(self.__model).where(self.__model.id == int(_id))
         result = (await self.session.execute(stmt)).one_or_none()
         return result
 
@@ -48,7 +48,7 @@ class UserRepository(
         :return:
         """
 
-        stmt = select(self.__model).where(self.__model.id_user_type == _id)
+        stmt = select(self.__model).where(self.__model.id_user_type == int(_id))
         result = (await self.session.execute(stmt)).fetchall()
         return result
 
@@ -59,7 +59,7 @@ class UserRepository(
         :return:
         """
 
-        stmt = delete(self.__model).where(self.__model.id == _id)
+        stmt = delete(self.__model).where(self.__model.id == int(_id))
         result = await self.session.execute(stmt)
         await self.session.commit()
         return result
@@ -72,9 +72,22 @@ class UserRepository(
         :return:
         """
 
-        stmt = update(self.__model).where(self.__model.id == _id).values(data)
+        stmt = (
+            update(self.__model).where(self.__model.id == int(_id)).values(data)
+        )  # noqa
         result = await self.session.execute(stmt)
         await self.session.commit()
         if result:
             return True
         return False
+
+    async def find_user_by_email(self, email: str) -> None:
+        """
+        Поиск пользователя по почте
+        :param email:
+        :return:
+        """
+
+        stmt = select(self.__model).where(self.__model.email == email)
+        result = await self.session.execute(stmt)
+        return result.one_or_none()

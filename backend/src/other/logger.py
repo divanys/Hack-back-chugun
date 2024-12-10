@@ -13,9 +13,9 @@ async def logger_dep() -> logging.Logger:
 
     logger = logging.getLogger(__name__)
     logging.basicConfig(
-        filemode="edu-connect.log",
+        filename="edu-connect.log",
         level=logging.INFO,
-        format="%(asctime)s %(user)-8s $(message)s",
+        format="%(asctime)s %(user)-8s %(message)s",
     )
 
     return logger

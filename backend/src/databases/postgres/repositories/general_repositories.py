@@ -46,7 +46,7 @@ class GeneralRepository(CreateInterface):
         :return:
         """
 
-        stmt = insert(self.__model).values(model_data.read_model())
+        stmt = insert(self.__model).values(await model_data.read_model())
         result = await self.session.execute(stmt)
         if result:
             await self.session.commit()

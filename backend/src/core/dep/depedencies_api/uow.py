@@ -2,6 +2,8 @@ from src.core.dep.depedencies_api import InterfaceUnitOfWork
 from src.databases.postgres.repositories import (  # noqa
     UserRepository,
     UserTypesRepository,
+    CoursesRepository,
+    HobbyCoursesRepository,
 )  # noqa
 from src.databases.db_worker import DatabaseWorker
 
@@ -21,6 +23,10 @@ class UnitOfWork(InterfaceUnitOfWork):
         self.session = session()
         self.user_repository = UserRepository(session=self.session)  # noqa
         self.user_type_repository = UserTypesRepository(session=self.session)  # noqa
+        self.courses_repository = CoursesRepository(session=self.session)  # noqa
+        self.hobby_courses_repository = HobbyCoursesRepository(
+            session=self.session
+        )  # noqa
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """
