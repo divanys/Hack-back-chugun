@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from backend.configs.descriptors import Descriptor
+from configs.descriptors import Descriptor
 from os import getenv
 from typing import Final
 
@@ -17,10 +17,10 @@ class DatabaseConfig:
     REDIS_PORT: Final[str] = Descriptor()
 
     def __init__(self):
-        self.DB_HOST = getenv("DB_NAME")
+        self.DB_HOST = getenv("DB_HOST")
         self.DB_USER = getenv("DB_USER")
         self.DB_PASSWORD = getenv("DB_PASSWORD")
-        self.DB_HOST = getenv("DB_HOST")
+        self.DB_NAME = getenv("DB_NAME")
         self.DB_PORT = getenv("DB_PORT")
         self.REDIS_HOST = getenv("REDIS_HOST")
         self.REDIS_PORT = getenv("REDIS_PORT")

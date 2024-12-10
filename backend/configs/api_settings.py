@@ -1,4 +1,4 @@
-from backend.configs.descriptors import Descriptor
+from configs.descriptors import Descriptor
 from os import getenv
 from dotenv import load_dotenv
 from typing import Final
