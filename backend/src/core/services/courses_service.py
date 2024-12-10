@@ -31,7 +31,7 @@ class CoursesService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:
                     result = await uow.courses_repository.create_data(
                         model_data=Courses(
                             title_course=new_course.title_course,
@@ -95,7 +95,7 @@ class CoursesService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:
                     is_deleted = await uow.courses_repository.delete(_id=_id)  # noqa
                     if is_deleted:
                         return None
@@ -123,7 +123,7 @@ class CoursesService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:
                     add_hobby = await uow.hobby_courses_repository.create_data(
                         model_data=HobbyCourses(
                             id_hobby=new_hobby_cs.id_hobby,
@@ -153,7 +153,7 @@ class CoursesService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:
                     is_deleted = await uow.hobby_courses_repository.delete(
                         _id=id_hobby
                     )  # noqa

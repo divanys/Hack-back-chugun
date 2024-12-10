@@ -24,7 +24,7 @@ class HobbyService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:  # noqa
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:  # noqa
                     is_created = await uow.hobbies_repository.create_data(  # noqa
                         model_data=Hobbies(text_hobby=new_hobby.text_hobby)  # noqa
                     )
@@ -68,7 +68,7 @@ class HobbyService:
                 _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER:
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:
                     is_deleted = await uow.hobbies_repository.delete(
                         _id=id_hobby
                     )  # noqa
