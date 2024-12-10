@@ -19,4 +19,6 @@ jobs:
       - name: Install lint
         run: pip3 install flake8
       - name: Run lint
-        run: flake8 .
+        run: |
+          cd backend
+          flake8 .
