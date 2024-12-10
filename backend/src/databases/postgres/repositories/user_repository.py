@@ -61,6 +61,7 @@ class UserRepository(
 
         stmt = delete(self.__model).where(self.__model.id == _id)
         result = await self.session.execute(stmt)
+        await self.session.commit()
         return result
 
     async def update_one(self, _id: int, data: dict) -> None:
@@ -73,6 +74,7 @@ class UserRepository(
 
         stmt = update(self.__model).where(self.__model.id == _id).values(data)
         result = await self.session.execute(stmt)
+        await self.session.commit()
         if result:
             return True
         return False

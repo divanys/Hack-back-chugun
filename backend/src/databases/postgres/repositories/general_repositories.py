@@ -49,5 +49,6 @@ class GeneralRepository(CreateInterface):
         stmt = insert(self.__model).values(model_data.read_model())
         result = await self.session.execute(stmt)
         if result:
+            await self.session.commit()
             return True
         return False

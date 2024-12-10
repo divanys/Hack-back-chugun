@@ -1,6 +1,7 @@
 from typing import Dict, Union, Any
 
 from sqlalchemy import String, Text, Integer, ForeignKey  # noqa
+from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.databases import MainBase
 from typing import List
@@ -16,7 +17,7 @@ class Users(MainBase):
         type_=String(150), nullable=False, unique=True, index=True  # noqa
     )  # noqa
     hashed_password: Mapped[str] = mapped_column(
-        type_=Text, nullable=False, unique=False, index=False  # noqa
+        type_=BYTEA, nullable=False, unique=False, index=False  # noqa
     )  # noqa
     user_name: Mapped[str] = mapped_column(
         type_=String(85), nullable=False, unique=False, index=False  # noqa
@@ -28,7 +29,7 @@ class Users(MainBase):
         type_=String(25), nullable=True, unique=False, index=True  # noqa
     )
 
-    id_user_type: Mapped[int] = mapped_column(ForeignKey("UsersType.id"))
+    id_user_type: Mapped[int] = mapped_column(ForeignKey("Userstype.id"))
 
     hobbies: Mapped[List["Hobbies"]] = relationship(  # noqa
         "Hobbies", back_populates="user_data", uselist=True  # noqa

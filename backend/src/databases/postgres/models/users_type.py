@@ -1,12 +1,12 @@
 from src.databases import MainBase
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String
-from typing import Dict, Union, Any
+from typing import Dict, Union, Any, List
 
 
 class UsersType(MainBase):
 
-    name_type: Mapped[str] = mapped_column(type_=String(100))
+    name_type: Mapped[str] = mapped_column(type_=String(100), unique=True)
     users: Mapped[List["Users"]] = relationship(  # noqa
         "Users", back_populates="types", uselist=True
     )  # noqa

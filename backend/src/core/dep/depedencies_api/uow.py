@@ -18,12 +18,10 @@ class UnitOfWork(InterfaceUnitOfWork):
         :return:
         """
 
-        async with self.database_worker.session() as session:
-            self.session: AsyncSession = session
-            self.user_repository = UserRepository(session=self.session)  # noqa
-            self.user_type_repository = UserTypesRepository(
-                session=self.session
-            )  # noqa
+        session = await self.database_worker.session
+        self.session = session()
+        self.user_repository = UserRepository(session=self.session)  # noqa
+        self.user_type_repository = UserTypesRepository(session=self.session) # noqa
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """
@@ -35,8 +33,8 @@ class UnitOfWork(InterfaceUnitOfWork):
         """
 
         if exc_type:
-            self.session.rollback()
-        self.session.close()
+            await self.session.rollback()
+        await self.session.close()
 
     async def commit(self):
         """

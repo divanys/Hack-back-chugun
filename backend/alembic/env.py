@@ -9,9 +9,9 @@ from alembic import context
 
 # Models
 from src.databases.postgres.models import (  # noqa
+    Users,
     UsersType,
     UserHobbies,
-    Users,
     University,
     Hobbies,
     HobbyCourses,
