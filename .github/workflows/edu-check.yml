@@ -1,0 +1,22 @@
+name: EduConnect
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  run-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install github actions
+        uses: actions/checkout@v4
+      - name: Install python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - name: Install lint
+        run: pip3 install flake8
+      - name: Run lint
+        run: python3 flake8 .
