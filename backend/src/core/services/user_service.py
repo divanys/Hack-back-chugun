@@ -58,7 +58,6 @@ class UserService:
             user_data_from_db = await uow.user_repository.find_user_by_email(
                 email=user_data.email
             )  # noqa
-            print(user_data_from_db)
             if user_data_from_db:
                 check_password = await HashService.verify_password(
                     password=user_data.password,

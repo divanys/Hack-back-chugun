@@ -15,8 +15,9 @@ class RegisterUser(BaseModel):
     id_university: int
 
 
-class AuthUser(RegisterUser):
-    pass
+class AuthUser(BaseModel):
+    email: Annotated[EmailStr, Field()]
+    password: Annotated[str, Field(min_length=6)]
 
 
 class AddUserHobby(BaseModel):
