@@ -10,7 +10,7 @@ from src.databases.postgres.repositories import (
     UniversityRepository,
     PortfolioRepository,
     UserHobbiesRepository,
-    RecommendsRepository
+    RecommendsRepository,
 )  # noqa
 
 

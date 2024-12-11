@@ -10,4 +10,3 @@ class CreateRecommends(BaseModel):
 
 class AllUserRecommends(BaseModel):
     recommends: Annotated[List[CreateRecommends], Field()]
-    

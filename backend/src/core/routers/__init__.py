@@ -27,5 +27,5 @@ __all__: List[str] = [
     "hobby_router",
     "vacansy_router",
     "university_router",
-    "rec_router"
+    "rec_router",
 ]  # noqa

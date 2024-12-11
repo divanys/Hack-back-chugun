@@ -8,7 +8,7 @@ from src.other.logger import logger_dep, user_config
 from src.core.dep.auth.auth_service import AuthService
 
 
-rec_router: APIRouter = APIRouter(prefix="/recommends", tags=["Recommends"])
+rec_router: APIRouter = APIRouter(prefix="/recommends", tags=["Recommends"])  # noqa
 
 
 @rec_router.post(
@@ -39,7 +39,8 @@ async def create_portfolio(
     """
 
     logger.info(
-        msg=f"Создание рекомендации id = {user_data.get("sub")}", extra=user_config
+        msg=f"Создание рекомендации id = {user_data.get("sub")}",
+        extra=user_config,  # noqa
     )
 
     await RecommendsService.create_recommends(
@@ -47,9 +48,9 @@ async def create_portfolio(
         uow=uow,
         new_rec=CreateRecommends(
             id_user=id_user,
-            id_us_ch=int(user_data.get('sub')),
-            description=description
-        )
+            id_us_ch=int(user_data.get("sub")),
+            description=description,  # noqa
+        ),
     )
 
 
@@ -81,7 +82,9 @@ async def my_portfolio(
         msg=f"Recommends: Получение информации о своих рекомендациях id = {user_data.get('sub')}"  # noqa
     )  # noqa
 
-    return await RecommendsService.get_my_recommends(token_data=user_data, uow=uow)
+    return await RecommendsService.get_my_recommends(
+        token_data=user_data, uow=uow
+    )  # noqa
 
 
 @rec_router.delete(
@@ -110,7 +113,10 @@ async def delete_portfolio(
     """
 
     logger.info(
-        msg=f"Удаление рекомендации id = {user_data.get('sub')}", extra=user_config
+        msg=f"Удаление рекомендации id = {user_data.get('sub')}",
+        extra=user_config,  # noqa
     )  # noqa
 
-    await RecommendsService.delete_recommends(token_data=user_data, uow=uow, id_rec=id_rec)
+    await RecommendsService.delete_recommends(
+        token_data=user_data, uow=uow, id_rec=id_rec
+    )

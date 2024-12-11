@@ -24,17 +24,20 @@ class RecommendsService:
         """
 
         async with uow:
-            user_data = await uow.user_repository.get_one(
-                _id=new_rec.id_us_ch
+            user_data = await uow.user_repository.get_one(_id=new_rec.id_us_ch)  # noqa
+            student_data = await uow.user_repository.get_one(
+                _id=token_data.get("sub")
             )  # noqa
-            student_data = await uow.user_repository.get_one(_id=token_data.get('sub'))
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value and student_data[0].id_user_type == UserTypesEnum.USER.value: # noqa
+                if (
+                    user_data[0].id_user_type == UserTypesEnum.TEACHER.value
+                    and student_data[0].id_user_type == UserTypesEnum.USER.value  # noqa
+                ):  # noqa
                     is_created = await uow.recommends_repository.create_data(
                         model_data=Recommends(
                             id_user=new_rec.id_user,
                             id_us_ch=new_rec.id_us_ch,
-                            description=new_rec.description
+                            description=new_rec.description,
                         )
                     )
 
@@ -55,7 +58,9 @@ class RecommendsService:
         """
 
         async with uow:
-            my_rec = await uow.recommends_repository.get_all(_id=int(token_data.get('sub')))
+            my_rec = await uow.recommends_repository.get_all(
+                _id=int(token_data.get("sub"))
+            )
             all_recommends = AllUserRecommends(recommends=[])
             if my_rec:
                 for rec in my_rec:
@@ -63,7 +68,7 @@ class RecommendsService:
                         CreateRecommends(
                             id_user=rec[0].id_user,
                             id_us_ch=rec[0].id_us_ch,
-                            description=rec[0].description
+                            description=rec[0].description,
                         )
                     )
             return all_recommends
@@ -84,13 +89,13 @@ class RecommendsService:
 
         async with uow:
             user_data = await uow.user_repository.get_one(
-                _id=token_data.get('sub')
+                _id=token_data.get("sub")
             )  # noqa
             if user_data:
-                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value: # noqa
+                if user_data[0].id_user_type == UserTypesEnum.TEACHER.value:  # noqa
                     is_deleted = await uow.recommends_repository.delete(
                         _id=id_rec
-                    )
+                    )  # noqa
                     if is_deleted:
                         return None
                     await RecommendsErrors.no_delete_recommends()
