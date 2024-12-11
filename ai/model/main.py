@@ -63,6 +63,6 @@ def predict_class(hobby_text, recommendation_text):
     prediction = model.predict(vectorized_input)
     return prediction.argmax() + 1  # класс (1-10)
 
-hobby_example = "Python"
-recommendation_example = "backend тебе даётся лучше, чем frontend. Я считаю, тебе стоит изучить фреймворк Django во всём программировании"
+hobby_example = "CSS, HTML"
+recommendation_example = "Проявляет хорошие навыки. Рекомендуется углубить знания о backend"
 print("Предсказанный класс:", predict_class(hobby_example, recommendation_example))
