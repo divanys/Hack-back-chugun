@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import Dict, Union, Any
 
-from sqlalchemy import String, Text, Integer, ForeignKey  # noqa
+from sqlalchemy import String, Text, Integer, ForeignKey, Date  # noqa
 from sqlalchemy.dialects.postgresql import BYTEA
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.databases import MainBase
@@ -20,7 +21,13 @@ class Users(MainBase):
         type_=BYTEA, nullable=False, unique=False, index=False  # noqa
     )  # noqa
     user_name: Mapped[str] = mapped_column(
-        type_=String(85), nullable=True, unique=False, index=False  # noqa
+        type_=String(85), nullable=False, unique=False, index=False  # noqa
+    )  # noqa
+    user_surname: Mapped[str] = mapped_column(
+        type_=String(125), nullable=False, unique=False, index=False
+    )  # noqa
+    date_birthday: Mapped[datetime.date] = mapped_column(
+        type_=Date, nullable=False, unique=False, index=False
     )  # noqa
     avatar_url: Mapped[str] = mapped_column(
         type_=Text, nullable=True, unique=False, index=False  # noqa

@@ -31,6 +31,11 @@ class UserService:
                     id_user_type=UserTypesEnum.USER.value,
                     email=user_data.email,
                     hashed_password=hashed_password,
+                    user_name=user_data.user_name,
+                    user_surname=user_data.user_surname,
+                    phone_number=user_data.phone,
+                    date_birthday=user_data.date_birthday,
+                    id_university=user_data.id_university,
                 )  # noqa
             )
 

@@ -55,7 +55,8 @@ class GeneralRepository(CreateInterface):
             if result:
                 await self.session.commit()
                 return True
-        except Exception:
+        except Exception as ex:
+            print(ex)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Не удалось создать запись",
