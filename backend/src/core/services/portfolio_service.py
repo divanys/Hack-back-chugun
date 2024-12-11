@@ -1,5 +1,5 @@
 from src.core.dep.depedencies_api import InterfaceUnitOfWork
-from src.core.dto.portfolio_dto import CreatePortfolio, UserPortfolioInformation
+from src.core.dto.portfolio_dto import CreatePortfolio, UserPortfolioInformation, HobbiPortfolio, RecommendsPortfolio
 from src.core.errors.auth_errors import AuthErrors
 from src.core.errors.portfolio_errors import PortfolioErrors
 from src.other.enums.api_enums import UserTypesEnum
@@ -56,12 +56,14 @@ class PorfolioService:
             user_portfolio = await uow.portfolio_repository.get_one(
                 _id=int(token_data.get("sub"))
             )
+            user_hobbies = await uow.user_hobbies_repository.get_all(_id=int(token_data.get("sub"))) # noqa
+            user_recommends = await uow.recommends_repository.get_all(_id=int(token_data.get("sub"))) # noqa
             if user_portfolio:
                 return UserPortfolioInformation(
                     id_user=user_portfolio[0].id,
                     description=user_portfolio[0].description,
-                    my_hobbies=[],
-                    my_recommends=[],
+                    my_hobbies=[HobbiPortfolio(id_hobby=hobby.id_hobby, id_user=hobby.id_user) for hobby in user_hobbies[0]] if user_hobbies else [], # noqa
+                    my_recommends=[RecommendsPortfolio(id_us_ch=rec.id_us_ch, id_user=rec.id_user, description=rec.description) for rec in user_recommends[0]] if user_recommends else [], # noqa
                 )
             await PortfolioErrors.no_found_portfolio()
 

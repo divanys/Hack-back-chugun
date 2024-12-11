@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated, List, Dict
+from typing import Annotated, List, Any
 
 
 class CreatePortfolio(BaseModel):
@@ -8,5 +8,16 @@ class CreatePortfolio(BaseModel):
 
 
 class UserPortfolioInformation(CreatePortfolio):
-    my_hobbies: Annotated[List[Dict], Field()]
-    my_recommends: Annotated[List[Dict], Field()]
+    my_hobbies: Annotated[List[Any], Field()]
+    my_recommends: Annotated[List[Any], Field()]
+
+
+class HobbiPortfolio(BaseModel):
+    id_hobby: int
+    id_user: int
+
+
+class RecommendsPortfolio(BaseModel):
+    id_user: int
+    id_us_ch: int
+    description: str
