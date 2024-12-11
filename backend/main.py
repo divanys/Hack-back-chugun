@@ -5,39 +5,16 @@ from configs import api_settings
 from src.databases.db_worker import DatabaseWorker
 from contextlib import asynccontextmanager
 import os
-from src.databases.postgres.models import UsersType
-from src.other.enums.api_enums import UserTypesEnum
-from sqlalchemy import insert
+from src.other.scripts import create_hobbies, create_user_types
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> None:
     ses = await DatabaseWorker().session
     async with ses.begin() as session:
-        try:
-            user_types: dict[int, str] = {
-                1: "student",
-                2: "worker",
-                3: "admin",
-                4: "teacher",
-            }
-
-            for usertype in [
-                UserTypesEnum.USER.value,
-                UserTypesEnum.WORK.value,
-                UserTypesEnum.ADMIN.value,
-                UserTypesEnum.TEACHER.value,
-            ]:
-                stmt = insert(UsersType).values(
-                    name_type=user_types.get(usertype)
-                )  # noqa
-                await session.execute(stmt)
-
-            await session.commit()
-            await session.close()
-        except Exception:
-            pass
-
+        await create_hobbies(session=session)
+        await create_user_types(session=session)
+        await session.close()
         yield
 
 
