@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Annotated, List
+from typing import Annotated, List, Dict
 
 
 class CreateUniversity(BaseModel):
@@ -7,4 +7,4 @@ class CreateUniversity(BaseModel):
 
 
 class AllUniversity(BaseModel):
-    universities: Annotated[List[CreateUniversity], Field()]
+    universities: Annotated[List[Dict], Field()]

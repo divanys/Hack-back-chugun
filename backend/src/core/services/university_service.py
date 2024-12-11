@@ -52,7 +52,10 @@ class UniversityService:
             all_univ_res = AllUniversity(universities=[])
             for univ in all_university:
                 all_univ_res.universities.append(
-                    CreateUniversity(name_university=univ[0].name_university)
+                    {
+                        "id_univ": univ[0].id,
+                        "name_university": univ[0].name_university
+                    }
                 )
 
             return all_univ_res
