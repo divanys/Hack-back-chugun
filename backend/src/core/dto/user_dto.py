@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr, Field
-from typing import Annotated
+from typing import Annotated, List
 
 
 class RegisterUser(BaseModel):
@@ -9,3 +9,12 @@ class RegisterUser(BaseModel):
 
 class AuthUser(RegisterUser):
     pass
+
+
+class AddUserHobby(BaseModel):
+    id_hobby: Annotated[int, Field()]
+    id_user: Annotated[int, Field()]
+
+
+class UserHobbies(BaseModel):
+    hobbies: Annotated[List[AddUserHobby], Field()]

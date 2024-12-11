@@ -8,6 +8,7 @@ from src.databases.postgres.repositories import (  # noqa
     VacanciesRepository,
     UniversityRepository,
     PortfolioRepository,
+    UserHobbiesRepository,
 )  # noqa
 from src.databases.db_worker import DatabaseWorker
 
@@ -35,6 +36,9 @@ class UnitOfWork(InterfaceUnitOfWork):
         self.vacancies_repository = VacanciesRepository(session=self.session)  # noqa
         self.university_repository = UniversityRepository(session=self.session)  # noqa
         self.portfolio_repository = PortfolioRepository(session=self.session)  # noqa
+        self.user_hobbies_repository = UserHobbiesRepository(
+            session=self.session
+        )  # noqa
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """
