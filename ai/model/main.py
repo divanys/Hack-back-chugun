@@ -52,21 +52,17 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Обучаем модель
 model.fit(X_train, y_train, epochs=10, batch_size=16, validation_split=0.2)
 
-# Оцениваем модель
 loss, accuracy = model.evaluate(X_test, y_test)
 print(f"Точность: {accuracy * 100:.2f}%")
 
-# Функция предсказания
 def predict_class(hobby_text, recommendation_text):
     combined_input = hobby_text + " " + recommendation_text
     vectorized_input = vectorizer.transform([combined_input]).toarray()
     prediction = model.predict(vectorized_input)
-    return prediction.argmax() + 1  # Возвращаем класс (1-10)
+    return prediction.argmax() + 1  # класс (1-10)
 
-# Пример использования
-hobby_example = "игры на компьютере, программирование"
-recommendation_example = "Студент интересуется технологиями. Рекомендуется изучить алгоритмы."
+hobby_example = "Python"
+recommendation_example = "backend тебе даётся лучше, чем frontend. Я считаю, тебе стоит изучить фреймворк Django во всём программировании"
 print("Предсказанный класс:", predict_class(hobby_example, recommendation_example))
