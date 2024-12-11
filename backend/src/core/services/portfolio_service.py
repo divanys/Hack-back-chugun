@@ -54,11 +54,15 @@ class PorfolioService:
 
         async with uow:
             user_portfolio = await uow.portfolio_repository.get_one(
-                _id=token_data.get("sub")
+                _id=int(token_data.get("sub"))
             )
             if user_portfolio:
-                pass
-                return UserPortfolioInformation()
+                return UserPortfolioInformation(
+                    id_user=user_portfolio[0].id,
+                    description=user_portfolio[0].description,
+                    my_hobbies=[],
+                    my_recommends=[],
+                )
             await PortfolioErrors.no_found_portfolio()
 
     @classmethod

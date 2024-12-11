@@ -6,6 +6,7 @@ from src.core.dep.depedencies_api import InterfaceUnitOfWork, UnitOfWork
 from src.core.dep.auth.auth_service import AuthService
 from src.other.logger import logger_dep, user_config
 from logging import Logger
+from src.databases.redis.redis_worker import RedisWorker, redis_dep
 
 
 university_router: APIRouter = APIRouter(
@@ -52,6 +53,7 @@ async def create_vacansy(
 async def all_vacancies(
     logger: Annotated[Logger, Depends(logger_dep)],
     db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
+    redis: Annotated[RedisWorker, Depends(redis_dep)],
 ) -> AllUniversity:
     """
     Все учебные заведения
@@ -63,7 +65,14 @@ async def all_vacancies(
     logger.info(
         msg="University: Получение всех учебных заведений", extra=user_config
     )  # noqa
-    return await UniversityService.all_universities(uow=db)  # noqa
+
+    redis_data = await redis.get_value(key="all_university")
+    if redis_data:
+        return redis_data
+    else:
+        all_univ = await UniversityService.all_universities(uow=db)  # noqa
+        await redis.set_key(key="all_university", value=all_univ.json())
+        return all_univ
 
 
 @university_router.delete(

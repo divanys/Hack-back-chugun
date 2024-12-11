@@ -6,6 +6,7 @@ from src.core.dto.portfolio_dto import CreatePortfolio, UserPortfolioInformation
 from src.core.services.portfolio_service import PorfolioService
 from src.other.logger import logger_dep, user_config
 from src.core.dep.auth.auth_service import AuthService
+from src.databases.redis.redis_worker import RedisWorker, redis_dep
 
 
 portfolio_router: APIRouter = APIRouter(prefix="/portfolio", tags=["Portfolio"])
@@ -61,6 +62,7 @@ async def my_portfolio(
     logger: Annotated[Logger, Depends(logger_dep)],
     uow: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
     user_data: Annotated[dict, Depends(AuthService.verify)],
+    redis: Annotated[RedisWorker, Depends(redis_dep)],
     req: Request,
     res: Response,
 ) -> UserPortfolioInformation:
@@ -78,7 +80,20 @@ async def my_portfolio(
         msg=f"Portfolio: Получение информации о своём портфолио id = {user_data.get('sub')}"  # noqa
     )  # noqa
 
-    return await PorfolioService.get_my_portfolio(token_data=user_data, uow=uow)
+    redis_data = await redis.get_value(
+        key="my_portfolio_id_{}".format(user_data.get("sub"))
+    )  # noqa
+    if redis_data:
+        return redis_data
+    else:
+        profile_data = await PorfolioService.get_my_portfolio(
+            token_data=user_data, uow=uow
+        )  # noqa
+        await redis.set_key(  # noqa
+            key="my_portfolio_id_{}".format(user_data.get("sub")),  # noqa
+            value=profile_data.json(),
+        )
+        return profile_data
 
 
 @portfolio_router.delete(
