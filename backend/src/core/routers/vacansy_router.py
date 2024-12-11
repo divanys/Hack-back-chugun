@@ -5,6 +5,7 @@ from typing import Annotated
 from src.core.dep.depedencies_api import InterfaceUnitOfWork, UnitOfWork
 from src.core.dep.auth.auth_service import AuthService
 from src.other.logger import logger_dep, user_config
+from src.databases.redis.redis_worker import RedisWorker, redis_dep
 from logging import Logger
 
 
@@ -51,6 +52,7 @@ async def create_vacansy(
 )
 async def all_vacancies(
     logger: Annotated[Logger, Depends(logger_dep)],
+    redis: Annotated[RedisWorker, Depends(redis_dep)],
     db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
 ) -> AllVacancies:
     """
@@ -61,7 +63,14 @@ async def all_vacancies(
     """
 
     logger.info(msg=f"Vacansy: Получение всех вакансий", extra=user_config)  # noqa
-    return await VacanciesService.all_vacansy(uow=db)  # noqa
+
+    redis_data = await redis.get_value(key="all_vacansy")
+    if redis_data:
+        return redis_data
+    else:
+        all_vac = await VacanciesService.all_vacansy(uow=db)  # noqa
+        await redis.set_key(key="all_vacansy", value=all_vac.json())
+        return all_vac
 
 
 @vacansy_router.delete(

@@ -9,8 +9,10 @@ from src.core.dep.depedencies_api import InterfaceUnitOfWork, UnitOfWork  # noqa
 from typing import Annotated
 
 from src.core.services.courses_service import CoursesService
+from src.databases.redis.redis_worker import RedisWorker
 from src.other import logger_dep, user_config
 from src.core.dto.courses_dto import CreateCourses, AllCourses, HobbyCourse  # noqa
+from src.databases.redis.redis_worker import redis_dep
 
 courses_router: APIRouter = APIRouter(prefix="/courses", tags=["Courses"])
 
@@ -98,6 +100,7 @@ async def add_hobby_in_course(
 async def all_courses(
     logger: Annotated[Logger, Depends(logger_dep)],
     db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
+    redis: Annotated[RedisWorker, Depends(redis_dep)],
 ) -> AllCourses:
     """
     Получение всех курсов
@@ -109,7 +112,13 @@ async def all_courses(
 
     logger.info(msg=f"Courses: Получение всех курсов", extra=user_config)  # noqa
 
-    return await CoursesService.get_all_information(uow=db)
+    redis_data = await redis.get_value(key="all_courses")
+    if redis_data:
+        return redis_data
+    else:
+        courses = await CoursesService.get_all_information(uow=db)
+        await redis.set_key(key="all_courses", value=courses.json())
+        return courses
 
 
 @courses_router.delete(

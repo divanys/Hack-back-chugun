@@ -12,6 +12,7 @@ from src.core.services.hobby_service import HobbyService
 from src.core.services.user_hobbies_service import UserHobbiesService
 from src.other import logger_dep, user_config
 from src.core.dto.hobby_dto import CreateHobby, AllHobbies
+from src.databases.redis.redis_worker import redis_dep, RedisWorker
 
 
 hobby_router: APIRouter = APIRouter(prefix="/hobby", tags=["Hobby"])  # noqa
@@ -101,6 +102,7 @@ async def my_hobbies(
     logger: Annotated[Logger, Depends(logger_dep)],
     db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],  # noqa
     token_data: Annotated[dict, Depends(AuthService.verify)],  # noqa
+    redis: Annotated[RedisWorker, Depends(redis_dep)],  # noqa
     req: Request,
     res: Response,
 ) -> UserHobbies:
@@ -114,7 +116,20 @@ async def my_hobbies(
     :return:
     """
 
-    return await UserHobbiesService.my_hobbies(token_data=token_data, uow=db)  # noqa
+    redis_data = await redis.get_value(
+        key="my_hobbies_id={}".format(int(token_data.get("sub")))
+    )
+    if redis_data:
+        return redis_data
+    else:
+        my_hobbies = await UserHobbiesService.my_hobbies(
+            token_data=token_data, uow=db
+        )  # noqa
+        await redis.set_key(
+            key="my_hobbies_id={}".format(int(token_data.get("sub"))),
+            value=my_hobbies.json(),
+        )
+        return my_hobbies
 
 
 @hobby_router.get(
@@ -127,6 +142,7 @@ async def my_hobbies(
 async def all_hobbies(
     logger: Annotated[Logger, Depends(logger_dep)],
     db: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
+    redis: Annotated[RedisWorker, Depends(redis_dep)],
     req: Request,
     res: Response,
 ) -> AllHobbies:
@@ -140,8 +156,14 @@ async def all_hobbies(
     """
 
     logger.info(msg=f"Hobbies: Получение всех хобби", extra=user_config)  # noqa
+    redis_data = await redis.get_value("all_hobbies")
 
-    return await HobbyService.all_hobby(uow=db)
+    if redis_data:
+        return redis_data
+    else:
+        all_hobbies = await HobbyService.all_hobby(uow=db)
+        await redis.set_key(key="all_hobbies", value=all_hobbies.json())
+        return all_hobbies
 
 
 @hobby_router.delete(
