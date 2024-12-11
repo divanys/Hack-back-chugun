@@ -1,3 +1,4 @@
+import json
 from typing import Annotated
 from logging import Logger
 from fastapi import status, Depends, APIRouter, Request, Response
@@ -89,6 +90,7 @@ async def my_portfolio(
         profile_data = await PorfolioService.get_my_portfolio(
             token_data=user_data, uow=uow
         )  # noqa
+        print(profile_data)
         await redis.set_key(  # noqa
             key="my_portfolio_id_{}".format(user_data.get("sub")),  # noqa
             value=profile_data.json(),
