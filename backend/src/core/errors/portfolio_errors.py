@@ -6,19 +6,19 @@ class PortfolioErrors:
     async def no_create_portfolio(cls) -> None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Не удалось создать портфолио"
+            detail="Не удалось создать портфолио",  # noqa
         )
 
     @classmethod
     async def no_delete_portfolio(cls) -> None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Не удалось удалить портфолио"
+            detail="Не удалось удалить портфолио",  # noqa
         )
 
     @classmethod
     async def no_found_portfolio(cls) -> None:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Не удалось найти портфолио"
+            detail="Не удалось найти портфолио",  # noqa
         )

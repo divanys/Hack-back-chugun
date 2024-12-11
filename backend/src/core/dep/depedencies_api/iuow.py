@@ -8,7 +8,7 @@ from src.databases.postgres.repositories import (
     HobbiesRepository,
     VacanciesRepository,
     UniversityRepository,
-    PortfolioRepository
+    PortfolioRepository,
 )  # noqa
 
 

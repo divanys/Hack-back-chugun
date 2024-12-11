@@ -1,13 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.databases.postgres.models import Portfolio
-from src.databases.postgres.repositories import GeneralRepository # noqa
-from src.databases.postgres.repositories.interfaces import (DeleteInterface, GetOneInterface) # noqa
+from src.databases.postgres.repositories import GeneralRepository  # noqa
+from src.databases.postgres.repositories.interfaces import (
+    DeleteInterface,
+    GetOneInterface,
+)  # noqa
 from sqlalchemy import select, delete
 from typing import Type, Sequence
 from src.core.errors.portfolio_errors import PortfolioErrors
 
 
-class PortfolioRepository(GeneralRepository, DeleteInterface, GetOneInterface): # noqa
+class PortfolioRepository(GeneralRepository, DeleteInterface, GetOneInterface):  # noqa
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
         self.__model: Type[Portfolio] = Portfolio
@@ -33,7 +36,7 @@ class PortfolioRepository(GeneralRepository, DeleteInterface, GetOneInterface): 
 
         try:
             stmt = delete(Portfolio).where(Portfolio.id_user == _id)
-            result = await self.session.execute(stmt)
+            await self.session.execute(stmt)
             await self.session.commit()
             return True
         except Exception:
