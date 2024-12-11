@@ -6,7 +6,9 @@ from typing import Dict, Union, Any
 
 class HobbyCourses(MainBase):
     id_course: Mapped[int] = mapped_column(ForeignKey("Courses.id"))
-    id_hobby: Mapped[int] = mapped_column(ForeignKey("Hobbies.id"))
+    id_hobby: Mapped[int] = mapped_column(
+        ForeignKey("Hobbies.id", ondelete="cascade")
+    )  # noqa
     course_data: Mapped["Courses"] = relationship(  # noqa
         "Courses", back_populates="hobbies", uselist=False  # noqa
     )
