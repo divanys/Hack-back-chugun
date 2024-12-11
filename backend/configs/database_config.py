@@ -14,7 +14,8 @@ class DatabaseConfig:
     DB_HOST: Final[str] = Descriptor()
     DB_PORT: Final[str] = Descriptor()
     REDIS_HOST: Final[str] = Descriptor()
-    REDIS_PORT: Final[str] = Descriptor()
+    REDIS_PORT: Final[int] = Descriptor()
+    REDIS_LIVE: Final[int] = Descriptor()
 
     def __init__(self):
         self.DB_HOST = getenv("DB_HOST")
@@ -23,7 +24,8 @@ class DatabaseConfig:
         self.DB_NAME = getenv("DB_NAME")
         self.DB_PORT = getenv("DB_PORT")
         self.REDIS_HOST = getenv("REDIS_HOST")
-        self.REDIS_PORT = getenv("REDIS_PORT")
+        self.REDIS_PORT = int(getenv("REDIS_PORT"))
+        self.REDIS_LIVE = int(getenv("REDIS_LIVE"))
 
 
 db: DatabaseConfig = DatabaseConfig()

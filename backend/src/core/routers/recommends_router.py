@@ -6,7 +6,7 @@ from src.core.dto.recommends_dto import CreateRecommends, AllUserRecommends
 from src.core.services.recommends_service import RecommendsService
 from src.other.logger import logger_dep, user_config
 from src.core.dep.auth.auth_service import AuthService
-
+from src.databases.redis.redis_worker import redis_dep, RedisWorker
 
 rec_router: APIRouter = APIRouter(prefix="/recommends", tags=["Recommends"])  # noqa
 
@@ -65,6 +65,7 @@ async def my_portfolio(
     logger: Annotated[Logger, Depends(logger_dep)],
     uow: Annotated[InterfaceUnitOfWork, Depends(UnitOfWork)],
     user_data: Annotated[dict, Depends(AuthService.verify)],
+    redis: Annotated[RedisWorker, Depends(redis_dep)],
     req: Request,
     res: Response,
 ) -> AllUserRecommends:
@@ -82,9 +83,20 @@ async def my_portfolio(
         msg=f"Recommends: Получение информации о своих рекомендациях id = {user_data.get('sub')}"  # noqa
     )  # noqa
 
-    return await RecommendsService.get_my_recommends(
-        token_data=user_data, uow=uow
+    redis_data = await redis.get_value(
+        key=f"recommends_id_{int(user_data.get('sub'))}"
     )  # noqa
+    if redis_data:
+        return redis_data
+    else:
+        all_recommends = await RecommendsService.get_my_recommends(
+            token_data=user_data, uow=uow
+        )  # noqa
+        await redis.set_key(
+            key=f"recommends_id_{int(user_data.get('sub'))}",
+            value=all_recommends.json(),
+        )  # noqa
+        return all_recommends
 
 
 @rec_router.delete(
