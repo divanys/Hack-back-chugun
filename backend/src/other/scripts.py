@@ -61,6 +61,5 @@ async def create_hobbies(session: AsyncSession) -> None:
             await session.execute(stmt)
 
         await session.commit()
-    except Exception as ex:
-        print(ex)
+    except Exception:
         pass

@@ -5,10 +5,11 @@ from typing import Dict, Union, Any
 
 
 class Portfolio(MainBase):
-    id_user: Mapped[int] = mapped_column(ForeignKey("Users.id"))
+    id_user: Mapped[int] = mapped_column(ForeignKey("Users.id"), unique=True)
     description: Mapped[str] = mapped_column(
         type_=Text, nullable=False, index=False  # noqa
     )  # noqa
+
     user_data: Mapped["Users"] = relationship(  # noqa
         "Users", back_populates="portfolio_data", uselist=False  # noqa
     )

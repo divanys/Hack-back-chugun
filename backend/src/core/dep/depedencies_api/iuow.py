@@ -8,6 +8,7 @@ from src.databases.postgres.repositories import (
     HobbiesRepository,
     VacanciesRepository,
     UniversityRepository,
+    PortfolioRepository
 )  # noqa
 
 
@@ -20,6 +21,7 @@ class InterfaceUnitOfWork(ABC):
     hobbies_repository: Type[HobbiesRepository]
     vacancies_repository: Type[VacanciesRepository]
     university_repository: Type[UniversityRepository]
+    portfolio_repository: Type[PortfolioRepository]
 
     @abstractmethod
     async def __aenter__(self):
